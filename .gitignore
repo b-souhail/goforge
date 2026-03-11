@@ -1,0 +1,4 @@
+goforge     
+*.exe
+*.out
+.env
