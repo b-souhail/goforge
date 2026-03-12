@@ -2,17 +2,15 @@ package cmd
 
 import (
 	"fmt"
-	"goforge/internal/architecture"
 	"goforge/internal/models"
+	"goforge/internal/generate"
 	"os"
 	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
 
-var modules, arch string
-
-// initCmd represents the init command
+var modulesFlag, archFlag string
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Initialize a new GoForge project",
@@ -25,63 +23,61 @@ The generated project contains the default architectural layers
 used by GoForge such as domain,delivery, application and infrastructure.
 
 Examples:
-X = stil not implementef 
 
-  goforge init my-app
+  goforge init                        # creates my-app/ goforge.yaml with clean arch
+  goforge init myproject              # creates myproject/ goforge.yaml with clean arch
+  goforge init myproject --arch mvc   # creates myproject/ goforge.yaml with mvc arch
+  goforge init myproject -a mvc       # creates myproject/ goforge.yaml with mvc arch
+
+
+
+  {//this cmd will be combined white setup cmd
+  X = stil not implementef 
 
   goforge init my-app --modules users,posts,comments X
-
   goforge init my-app -m users,posts,comments X
-
-If no project name is provided, a default name will be used.
+  
+ }
 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		projectName := "my-app" //default project name if no name provided
-		projectArch := "clean"  //default arch if no arch selected
 
+		projectName := "my-app" //default project name if no name provided
 		if len(args) > 0 {
 			projectName = args[0]
 		}
+
 		projectPath, _ := os.Getwd()
 		projectPath = filepath.Join(projectPath, projectName)
 		if err := os.MkdirAll(projectPath, 0755); err != nil {
-			fmt.Println(fmt.Errorf("dir already exists : %v", err))  /// traitement derr nedded
+			fmt.Println(fmt.Errorf("dir already exists : %v", err)) //todo\\
 			return
 		}
 
-		if err := os.Chdir(projectName); err != nil {   /// traitement derr  
-			fmt.Println(err)  
+		if err := os.Chdir(projectName); err != nil {
+			fmt.Println(err) //todo\\
+			return
+		}
+		config := models.Config{Path: projectPath, Architecture: archFlag, Name: projectName, Modules: modulesFlag}
+
+		if err := generate.CreateYaml(config); err != nil {
+			fmt.Println(err) //todo\\
 			return
 		}
 
-		if _, err := os.Stat("goforge.yaml"); err == nil {
-			fmt.Println(fmt.Errorf("config already exists : %v", err))  /// traitement derr needed
-			return
-		}
-		config := models.Config{Path: projectPath, Architecture: projectArch, Name: projectName, Modules: modules}
-
-		if err := architecture.CreateConfig(config); err != nil {
-			fmt.Println(err)  /// traitement derr needed 
-			return
-		}
-
-		fmt.Println("Project initialized  goforge.yaml ready for being configurated ")
-		/// add inteligent cmd also set up conv neeeded conversastion setup
+		fmt.Printf("Project %s ready for beign setup with %s architecture\n", projectName, archFlag)
+		fmt.Printf("Next steps:\ngoforge setup %v\n", projectName)
 	},
-
 }
 
 func init() {
 	rootCmd.AddCommand(initCmd)
-
-	initCmd.Flags().StringVarP( // cmd ready for being used (need to reimplement )
-		&modules,
+	initCmd.Flags().StringVar(&archFlag, "arch", "clean", "Architecture type: clean, mvc")
+	initCmd.Flags().StringVarP(
+		&modulesFlag,
 		"modules",
 		"m",
 		"",
 		"Modules to generate (comma separated: user,post,like)",
 	)
-	// initCmd.Flags().StringVarP(&arch, "arch", "a", "", "") //ignore 
-	//add  func for seting up mvc instead of mvc   \\\\\\\\\\\\ez impl//////
 }
