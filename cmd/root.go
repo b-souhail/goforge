@@ -26,21 +26,17 @@ over their code.
 Examples:
 X : no usage until now implementation gonna be done later thx
 
-  goforge init my-app X
-  goforge init my-app --modules users,posts X
+  goforge init [projectName]   #by default the name is my-app 
+  cd [projectName]
+  goforge setup ./goforge.yaml #no need to specify the yaml file excepte if you re not in the dir
 
-  goforge add module comments X
-  goforge add usecase create-user X
+  goforge init my-app --modules users,posts X
 
 Use "goforge --help" for more information about a command`,
 
-
-
-	// Run: func(cmd *cobra.Command, args []string) { },
+	// Run: func(cmd *cobra.Command, args []string) { // TODO set up a conv whit the cli  },
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
