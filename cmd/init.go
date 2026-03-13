@@ -67,6 +67,19 @@ Examples:
 
 		fmt.Printf("Project %s ready for beign setup with %s architecture\n", projectName, archFlag)
 		fmt.Printf("Next steps:\ngoforge setup %v\n", projectName)
+
+		if modulesFlag != "" {
+			    configFile := filepath.Join(projectPath, "goforge.yaml")
+
+            config, err := config.ReadYaml(configFile)
+            if err != nil {
+                fmt.Println(err) ///\\\
+            }
+            if err := generate.Scaffold(projectPath, config.Layers); err != nil {
+                fmt.Println(err) ///\\\\
+                return
+            }
+        }
 	},
 }
 
