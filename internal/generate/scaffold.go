@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func ScaffoldConfig(baseDir string, layers []models.Layer) error {
+func Scaffold(baseDir string, layers []models.Layer) error {
 	for _, layer := range layers {
 		layerPath := filepath.Join(baseDir, layer.Name)
 		if err := os.MkdirAll(layerPath, 0755); err != nil {

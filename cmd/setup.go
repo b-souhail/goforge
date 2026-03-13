@@ -49,7 +49,7 @@ Examples:
 		}
 
 		baseDir := filepath.Dir(configPath)
-		if err := generate.ScaffoldConfig(baseDir, config.Layers); err != nil {
+		if err := generate.Scaffold(baseDir, config.Layers); err != nil {
 			fmt.Println(err)
 			return
 		}
