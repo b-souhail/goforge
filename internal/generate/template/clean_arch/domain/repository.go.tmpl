@@ -1,0 +1,12 @@
+package domain
+
+import (
+	"context"
+)
+
+type {{.ModuleRepo}} interface {
+//todo add receiver's
+	Create(ctx context.Context, m {{.Module}}) ({{.Module}}, error)
+	Update(ctx context.Context, m {{.Module}}) ({{.Module}}, error)
+	Delete(ctx context.Context, m {{.Module}}) error
+}
