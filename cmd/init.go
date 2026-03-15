@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"goforge/internal/models"
 	"goforge/internal/generate"
+	"goforge/internal/models"
 	"os"
 	"path/filepath"
 
@@ -49,19 +49,19 @@ Examples:
 
 		projectPath, _ := os.Getwd()
 		projectPath = filepath.Join(projectPath, projectName)
-		if err := os.MkdirAll(projectPath, 0755); err != nil {
-			fmt.Println(fmt.Errorf("dir already exists : %v", err)) //todo\\
+
+		if _, err := os.Stat(projectPath); err == nil {
+			fmt.Println("dir already exists")
 			return
 		}
-
-		if err := os.Chdir(projectName); err != nil {
-			fmt.Println(err) //todo\\
+		if err := os.MkdirAll(projectPath, 0755); err != nil {
+			fmt.Println("error :", err)
 			return
 		}
 		config := models.Config{Path: projectPath, Architecture: archFlag, Name: projectName, Modules: modulesFlag}
 
 		if err := generate.CreateYaml(config); err != nil {
-			fmt.Println(err) //todo\\
+			fmt.Println(err)
 			return
 		}
 
