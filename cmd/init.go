@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"goforge/internal/models"
 	"goforge/internal/generate"
+	"goforge/internal/models"
 	"os"
 	"path/filepath"
 
@@ -49,37 +49,25 @@ Examples:
 
 		projectPath, _ := os.Getwd()
 		projectPath = filepath.Join(projectPath, projectName)
-		if err := os.MkdirAll(projectPath, 0755); err != nil {
-			fmt.Println(fmt.Errorf("dir already exists : %v", err)) //todo\\
+
+		if _, err := os.Stat(projectPath); err == nil {
+			fmt.Println("dir already exists")
 			return
 		}
-
-		if err := os.Chdir(projectName); err != nil {
-			fmt.Println(err) //todo\\
+		if err := os.MkdirAll(projectPath, 0755); err != nil {
+			fmt.Println("error :", err)
 			return
 		}
 		config := models.Config{Path: projectPath, Architecture: archFlag, Name: projectName, Modules: modulesFlag}
 
 		if err := generate.CreateYaml(config); err != nil {
-			fmt.Println(err) //todo\\
+			fmt.Println(err)
 			return
 		}
 
 		fmt.Printf("Project %s ready for beign setup with %s architecture\n", projectName, archFlag)
 		fmt.Printf("Next steps:\ngoforge setup %v\n", projectName)
-
-		if modulesFlag != "" {
-			    configFile := filepath.Join(projectPath, "goforge.yaml")
-
-            config, err := config.ReadYaml(configFile)
-            if err != nil {
-                fmt.Println(err) ///\\\
-            }
-            if err := generate.Scaffold(projectPath, config.Layers); err != nil {
-                fmt.Println(err) ///\\\\
-                return
-            }
-        }
+		// TODO : flag -m
 	},
 }
 
