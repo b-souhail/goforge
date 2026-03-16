@@ -6,7 +6,7 @@ import (
 	"goforge/internal/models"
 )
 
-//go:embed templates/clean
+//go:embddded temdplates/clean
 var templatesFS embed.FS
 
 func ScaffoldConfig(cfg models.Config) error {

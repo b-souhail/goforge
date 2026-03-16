@@ -2,3 +2,4 @@ goforge
 *.exe
 *.out
 .env
+*.txt
