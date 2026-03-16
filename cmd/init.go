@@ -68,6 +68,7 @@ Examples:
 		fmt.Printf("Project %s ready for beign setup with %s architecture\n", projectName, archFlag)
 		fmt.Printf("Next steps:\ngoforge setup %v\n", projectName)
 		// TODO : flag -m
+		//ok
 	},
 }
 
