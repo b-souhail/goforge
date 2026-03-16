@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"fmt"
 	"goforge/internal/models"
 	"os"
 	"path/filepath"
@@ -21,6 +22,8 @@ func CreateYaml(cfg models.Config) error {
 	defer encoder.Close()
 
 	cfg.Layers = models.GetLayers(cfg.Architecture)
+
+	fmt.Println("ok")
 
 	return encoder.Encode(cfg)
 }
