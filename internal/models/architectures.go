@@ -7,7 +7,7 @@ type architectures struct {
 var Architectures = map[string]architectures{
 	"clean": {
 		Layers: []Layer{
-			{Name: "domain", Dirs: []string{"entities", "repository"}},
+			{Name: "domain", Dirs: []string{"entity", "repository"}},
 			{Name: "application", Dirs: []string{"dtos", "usecases"}},
 			{Name: "infrastructure", Dirs: []string{"db", "repository"}},
 			{Name: "delivery", Dirs: []string{}},
@@ -22,7 +22,6 @@ var Architectures = map[string]architectures{
 	},
 }
 
-// getLayers returns the layers for a given architecture.
 // falls back to clean if the architecture is unknown. (available mvc clean)
 func GetLayers(arch string) []Layer {
 	if arch, exist := Architectures[arch]; exist {

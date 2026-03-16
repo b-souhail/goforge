@@ -5,7 +5,6 @@ import (
 	"goforge/internal/generate"
 	"goforge/internal/models"
 	"os"
-	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -33,13 +32,9 @@ Examples:
 
 		data, err := os.ReadFile(configPath)
 		if err != nil {
-			data, err = os.ReadFile(configPath + "/goforge.yaml")
-			if err != nil {
-				fmt.Printf("goforge.yaml not found\n")
-				fmt.Println("Run: goforge init <project-name>\nOr: goforge setup ./path/goforge.yaml")
-				return
-			}
-			configPath = configPath + "/goforge.yaml"
+			fmt.Println("file : goforge.yaml , not found")
+			fmt.Println("Run  : goforge setup ./path/goforge.yaml")
+			return
 		}
 
 		var config models.Config
@@ -47,13 +42,10 @@ Examples:
 			fmt.Printf("Failed to parse '%s': %v\n", configPath, err)
 			return
 		}
-
-		baseDir := filepath.Dir(configPath)
-		if err := generate.Scaffold(baseDir, config.Layers); err != nil {
+		if err := generate.ScaffoldConfig(config); err != nil {
 			fmt.Println(err)
 			return
 		}
-
 	},
 }
 
