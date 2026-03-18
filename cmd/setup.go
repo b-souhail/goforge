@@ -43,7 +43,7 @@ Examples:
 			return
 		}
 		if err := generate.ScaffoldConfig(config); err != nil {
-			fmt.Println(err)
+			fmt.Println("error :",err)
 			return
 		}
 	},

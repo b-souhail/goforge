@@ -9,7 +9,7 @@ var Architectures = map[string]architectures{
 		Layers: []Layer{
 			{Name: "domain", Dirs: []string{"entity", "repository"}},
 			{Name: "application", Dirs: []string{"dtos", "usecases"}},
-			{Name: "infrastructure", Dirs: []string{"db", "repository"}},
+			{Name: "infrastructure", Dirs: []string{"repository"}},
 			{Name: "delivery", Dirs: []string{}},
 		},
 	},

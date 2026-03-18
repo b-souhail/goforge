@@ -1,0 +1,11 @@
+package entity
+
+
+type {{.Module}} struct {
+    ID        string    `json:"id"`
+    CreatedAt time.Time `json:"created_at"`
+}
+
+func ({{.Receiver}} *{{.Module}}) validateBusinessRules() {
+    
+}
