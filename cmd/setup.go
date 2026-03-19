@@ -10,6 +10,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+var modulesFlag string
 var setupCmd = &cobra.Command{
 	Use:   "setup [config-path]",
 	Short: "Scaffold project layers from goforge.yaml",
@@ -33,7 +34,7 @@ Examples:
 		data, err := os.ReadFile(configPath)
 		if err != nil {
 			fmt.Println("file : goforge.yaml , not found")
-			fmt.Println("Run  : goforge setup ./path/goforge.yaml")
+			fmt.Println("Run  : goforge setup ./pathTo/goforge.yaml")
 			return
 		}
 
@@ -42,13 +43,30 @@ Examples:
 			fmt.Printf("Failed to parse '%s': %v\n", configPath, err)
 			return
 		}
-		if err := generate.ScaffoldConfig(config); err != nil {
-			fmt.Println("error :",err)
+		if config.Modules != "" && modulesFlag != "" {
+			fmt.Println("cannot use shorthand flag and yaml file to configure")
 			return
 		}
+		if modulesFlag != "" {
+			config.Modules = modulesFlag
+		}
+
+		if err := generate.ScaffoldConfig(config); err != nil {
+			fmt.Println("error :", err)
+			return
+		}
+		fmt.Println(config)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(setupCmd)
+	setupCmd.Flags().StringVarP(
+		&modulesFlag,
+		"modules",
+		"m",
+		"",
+		"Modules to generate (comma separated: user,post,like)",
+	)
+
 }
