@@ -61,7 +61,7 @@ Examples:
 		config := models.Config{Path: projectPath, Architecture: archFlag, Name: projectName}
 
 		if err := generate.CreateYaml(config); err != nil {
-			fmt.Println(err)
+			fmt.Println("error :",err)
 			return
 		}
 
@@ -72,5 +72,5 @@ Examples:
 
 func init() {
 	rootCmd.AddCommand(initCmd)
-	initCmd.Flags().StringVar(&archFlag, "arch", "clean", "Architecture type: clean, mvc")
+	initCmd.Flags().StringVarP(&archFlag, "arch", "a","clean", "Architecture type: clean, mvc")
 }
