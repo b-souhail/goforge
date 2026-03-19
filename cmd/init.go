@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var modulesFlag, archFlag string
+var archFlag string
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Initialize a new GoForge project",
@@ -58,28 +58,19 @@ Examples:
 			fmt.Println("error :", err)
 			return
 		}
-		config := models.Config{Path: projectPath, Architecture: archFlag, Name: projectName, Modules: modulesFlag}
+		config := models.Config{Path: projectPath, Architecture: archFlag, Name: projectName}
 
 		if err := generate.CreateYaml(config); err != nil {
-			fmt.Println(err)
+			fmt.Println("error :",err)
 			return
 		}
 
 		fmt.Printf("Project %s ready for beign setup with %s architecture\n", projectName, archFlag)
 		fmt.Printf("Next steps:\ngoforge setup %v\n", projectName)
-		// TODO : flag -m
-		//ok
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(initCmd)
-	initCmd.Flags().StringVar(&archFlag, "arch", "clean", "Architecture type: clean, mvc")
-	initCmd.Flags().StringVarP(
-		&modulesFlag,
-		"modules",
-		"m",
-		"",
-		"Modules to generate (comma separated: user,post,like)",
-	)
+	initCmd.Flags().StringVarP(&archFlag, "arch", "a","clean", "Architecture type: clean, mvc")
 }
