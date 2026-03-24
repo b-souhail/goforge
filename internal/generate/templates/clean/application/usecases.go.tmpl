@@ -11,9 +11,27 @@ func New{{.Module}}Usecase(repo repository.{{.Module}}Repo) {{.Module}}Usecase {
 	}
 }
 
-func ({{.Receiver}} *{{.Module}}Usecase) Addfriend() error {
-var ok dtos.{{.Module}}Data
-	var okk entity.{{.Module}}
-    fmt.Println(ok,okk)
-    	return nil
+func ({{.Receiver}} *{{.Module}}Usecase) Create{{.Module}}(data dtos.{{.Module}}Data) error {
+{{.Module}} := entity.{{.Module}}{
+
+}
+
+    	return {{.Receiver}}.repo.Create({{.Module}})
+}
+
+
+func ({{.Receiver}} *{{.Module}}Usecase) Read{{.Module}}(id int) (entity.{{.Module}},error) {
+  {{.Module}}Data, err :=  {{.Receiver}}.repo.Read(id)
+  if err != nil {
+  return entity.{{.Module}}{} , err
+  }
+ 	return {{.Module}}Data , nil
+}
+
+func ({{.Receiver}} *{{.Module}}Usecase) Update{{.Module}}(id int ,changes any) error {
+    	return {{.Receiver}}.repo.Update(id,changes)
+}
+
+func ({{.Receiver}} *{{.Module}}Usecase) Delete{{.Module}}(id int) error {
+    	return {{.Receiver}}.repo.Delete(id)
 }

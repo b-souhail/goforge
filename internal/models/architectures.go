@@ -3,7 +3,7 @@ package models
 type architectures struct {
 	Layers []Layer
 }
-// 
+
 var Architectures = map[string]architectures{
 	"clean": {
 		Layers: []Layer{
