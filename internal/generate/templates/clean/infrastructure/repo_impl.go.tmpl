@@ -1,0 +1,15 @@
+package repositories
+
+type {{.Module}}Repo struct {
+	db *sql.DB //////////
+}
+
+
+func New{{.Module}}Repo(db *sql.DB) repositories.{{.Module}}Repo {
+	return &{{.Module}}Repo{db: db}/////////
+}
+//
+func ({{.Receiver}} *{{.Module}}Repo) Get{{.Module}}(userId string)  {
+	
+}
+///////////////////////////////////////////////////////:
