@@ -1,0 +1,19 @@
+package usecases
+
+
+type {{.Module}}Usecase struct {
+	repo repository.{{.Module}}Repo
+}
+
+func New{{.Module}}Usecase(repo repository.{{.Module}}Repo) {{.Module}}Usecase {
+	return {{.Module}}Usecase{
+		repo: repo,
+	}
+}
+
+func ({{.Receiver}} *{{.Module}}Usecase) Addfriend() error {
+var ok dtos.{{.Module}}Data
+	var okk entity.{{.Module}}
+    fmt.Println(ok,okk)
+    	return nil
+}

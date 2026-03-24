@@ -1,7 +1,6 @@
 package generate
 
 import (
-	"fmt"
 	"goforge/internal/models"
 	"os"
 	"path/filepath"
@@ -10,7 +9,6 @@ import (
 )
 
 func CreateYaml(cfg models.Config) error {
-
 	yamlPath := filepath.Join(cfg.Path, "goforge.yaml")
 	file, err := os.Create(yamlPath)
 	if err != nil {
@@ -22,8 +20,5 @@ func CreateYaml(cfg models.Config) error {
 	defer encoder.Close()
 
 	cfg.Layers = models.GetLayers(cfg.Architecture)
-
-	fmt.Println("ok")
-
 	return encoder.Encode(cfg)
 }

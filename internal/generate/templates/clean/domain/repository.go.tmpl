@@ -1,0 +1,5 @@
+package repository
+
+type {{.Module}}Repo interface {
+    Get{{.Module}}() (entity.{{.Module}},error)
+}
