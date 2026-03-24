@@ -61,12 +61,12 @@ func generateFile(templateDir, destDir, tmplName, module string) error {
 	tmplPath := filepath.Join(templateDir, tmplName)
 	data, err := templatesFS.ReadFile(tmplPath)
 	if err != nil {
-		
+
 		return err
 	}
 	tmpl, err := template.New(tmplName).Parse(string(data))
 	if err != nil {
-				fmt.Println("okokok")
+		fmt.Println("okokok")
 
 		return err
 	}
@@ -76,7 +76,7 @@ func generateFile(templateDir, destDir, tmplName, module string) error {
 
 	f, err := os.Create(filepath.Join(destDir, fileName))
 	if err != nil {
-				fmt.Println("okokok")
+		fmt.Println("okokok")
 
 		return err
 	}
@@ -87,8 +87,8 @@ func generateFile(templateDir, destDir, tmplName, module string) error {
 
 	var buf bytes.Buffer
 	err = tmpl.Execute(&buf, map[string]string{
-		"Module":   format,
-		"Receiver": strings.ToLower(string(module[0])),
+		"Module":      format,
+		"Receiver":    strings.ToLower(string(module[0])),
 	})
 	if err != nil {
 		return err

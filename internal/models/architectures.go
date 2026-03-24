@@ -3,7 +3,7 @@ package models
 type architectures struct {
 	Layers []Layer
 }
-// 
+
 var Architectures = map[string]architectures{
 	"clean": {
 		Layers: []Layer{
@@ -22,7 +22,8 @@ var Architectures = map[string]architectures{
 	},
 }
 
-// falls back to clean if the architecture is unknown. (available mvc clean)
+// falls back to clean if the architecture is unknown. (available for the m mvc clean)
+// microservices // improve clean archi by introducing DDD for domain layer 
 func GetLayers(arch string) []Layer {
 	if arch, exist := Architectures[arch]; exist {
 		return arch.Layers

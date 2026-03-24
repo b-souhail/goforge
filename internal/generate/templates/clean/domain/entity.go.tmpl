@@ -1,11 +1,18 @@
 package entity
 
+import "errors"
+
+
 
 type {{.Module}} struct {
-    ID        string    `json:"id"`
-    CreatedAt time.Time `json:"created_at"`
+    Id        int   
+    // TODO : add your entity
 }
 
-func ({{.Receiver}} *{{.Module}}) validateBusinessRules() {
-    
+func ({{.Receiver}} *{{.Module}}) validateBusinessRules() error {
+if {{.Receiver}}.Id <= 0 {
+ return errors.New("id not valid")
+}
+// TODO : check the businessRules (ex : valid mail ,name lenght, ....)
+    return nil
 }
