@@ -49,7 +49,6 @@ Examples:
 
 		projectPath, _ := os.Getwd()
 		projectPath = filepath.Join(projectPath, projectName)
-
 		if _, err := os.Stat(projectPath); err == nil {
 			fmt.Println("dir already exists")
 			return
@@ -61,16 +60,23 @@ Examples:
 		config := models.Config{Path: projectPath, Architecture: archFlag, Name: projectName}
 
 		if err := generate.CreateYaml(config); err != nil {
-			fmt.Println("error :",err)
+			fmt.Println("error :", err)
+			return
+		}
+		if err := generate.CreateMain(config); err != nil {
+			fmt.Println("error :", err)
+			return
+		}
+		if err := generate.InitGoModules(config); err != nil {
+			fmt.Println("error :", err)
 			return
 		}
 
 		fmt.Printf("Project %s ready for beign setup with %s architecture\n", projectName, archFlag)
-		fmt.Printf("Next steps:\ngoforge setup %v\n", projectName)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(initCmd)
-	initCmd.Flags().StringVarP(&archFlag, "arch", "a","clean", "Architecture type: clean, mvc")
+	initCmd.Flags().StringVarP(&archFlag, "arch", "a", "clean", "Architecture type: clean, mvc")
 }
