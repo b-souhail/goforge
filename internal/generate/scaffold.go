@@ -20,7 +20,7 @@ func ScaffoldConfig(c models.Config) error {
 	modules := strings.Split(c.Modules, ",")
 
 	for _, l := range c.Layers {
-		lPath := filepath.Join(c.Name, l.Name)
+		lPath :=  l.Name
 		if err := os.MkdirAll(lPath, 0755); err != nil {
 			return err
 		}
@@ -61,41 +61,40 @@ func generateFile(templateDir, destDir, tmplName, module string) error {
 	tmplPath := filepath.Join(templateDir, tmplName)
 	data, err := templatesFS.ReadFile(tmplPath)
 	if err != nil {
-
 		return err
 	}
 	tmpl, err := template.New(tmplName).Parse(string(data))
 	if err != nil {
-		fmt.Println("okokok")
-
 		return err
 	}
+
 	tmplN := strings.Split(tmplName, ".")
 
 	fileName := fmt.Sprintf("%s_%s.go", module, tmplN[0])
+	fullPath := filepath.Join(destDir, fileName)
 
-	f, err := os.Create(filepath.Join(destDir, fileName))
-	if err != nil {
-		fmt.Println("okokok")
-
+	if err := os.MkdirAll(destDir, os.ModePerm); err != nil {
 		return err
 	}
-	defer f.Close()
 
-	fLetter := strings.ToTitle(string(module[0]))
-	format := fmt.Sprintf("%s%s", fLetter, string(module[1:]))
+	fLetter := strings.ToUpper(string(module[0]))
+	format := fLetter + module[1:]
 
 	var buf bytes.Buffer
 	err = tmpl.Execute(&buf, map[string]string{
-		"Module":      format,
-		"Receiver":    strings.ToLower(string(module[0])),
+		"Module":   format,
+		"Receiver": strings.ToLower(string(module[0])),
 	})
 	if err != nil {
 		return err
 	}
-	formatted, err := imports.Process(filepath.Join(destDir, fileName), buf.Bytes(), nil)
+	if err := os.WriteFile(fullPath, buf.Bytes(), 0644); err != nil {
+		return err
+	}
+	opts := &imports.Options{}
+	formatted, err := imports.Process(fullPath, buf.Bytes(), opts)
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(filepath.Join(destDir, fileName), formatted, 0644)
+	return os.WriteFile(fullPath, formatted, 0644)
 }
