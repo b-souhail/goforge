@@ -5,6 +5,7 @@ import (
 	"goforge/internal/generate"
 	"goforge/internal/models"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -43,6 +44,12 @@ Examples:
 			fmt.Printf("Failed to parse '%s': %v\n", configPath, err)
 			return
 		}
+
+		config.Path = filepath.Dir(configPath)
+		if err := os.Chdir(config.Path); err != nil {
+			fmt.Println("error :", err)
+			return
+		}
 		if config.Modules != "" && modulesFlag != "" {
 			fmt.Println("cannot use shorthand flag and yaml file to configure")
 			return
@@ -55,7 +62,6 @@ Examples:
 			fmt.Println("error :", err)
 			return
 		}
-		fmt.Println(config)
 	},
 }
 
