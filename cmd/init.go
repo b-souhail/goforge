@@ -20,59 +20,55 @@ This command creates the base project structure and optionally
 generates initial modules.
 
 The generated project contains the default architectural layers
-used by GoForge such as domain,delivery, application and infrastructure.
+used by GoForge such as domain,delivery, application and infrastructure or 
+MVC architecture based on Model, View and Controller layers.
 
 Examples:
 
-  goforge init                        # creates my-app/ goforge.yaml with clean arch
-  goforge init myproject              # creates myproject/ goforge.yaml with clean arch
-  goforge init myproject --arch mvc   # creates myproject/ goforge.yaml with mvc arch
-  goforge init myproject -a mvc       # creates myproject/ goforge.yaml with mvc arch
+  goforge init                        # creates my-app/ folder && goforge.yaml file whit clean architecture
+  goforge init myproject --arch mvc   # creates myproject/ folder && goforge.yaml file  with mvc architecture
 
-
-
-  {//this cmd will be combined white setup cmd
-  X = stil not implementef 
-
-  goforge init my-app --modules users,posts,comments X
-  goforge init my-app -m users,posts,comments X
-  
  }
 
 `,
-	Run: func(cmd *cobra.Command, args []string) {
+	Args: cobra.MaximumNArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		//fallback to project name if no name provided
+		projectName := "my-app" //default name
 
-		projectName := "my-app" //default project name if no name provided
-		if len(args) > 0 {
+		if len(args) == 1 {
 			projectName = args[0]
 		}
 
 		projectPath, _ := os.Getwd()
 		projectPath = filepath.Join(projectPath, projectName)
+
 		if _, err := os.Stat(projectPath); err == nil {
-			fmt.Println("dir already exists")
-			return
+			return fmt.Errorf("directory %s already exists\n", projectName)
 		}
-		if err := os.MkdirAll(projectPath, 0755); err != nil {
-			fmt.Println("error :", err)
-			return
+
+		const dirPerm = 0o755
+		if err := os.MkdirAll(projectPath, dirPerm); err != nil {
+			return fmt.Errorf("create directory: %w \n", err)
 		}
+
 		config := models.Config{Path: projectPath, Architecture: archFlag, Name: projectName}
 
-		if err := generate.CreateYaml(config); err != nil {
-			fmt.Println("error :", err)
-			return
-		}
-		if err := generate.CreateMain(config); err != nil {
-			fmt.Println("error :", err)
-			return
-		}
-		if err := generate.InitGoModules(config); err != nil {
-			fmt.Println("error :", err)
-			return
+		if err := generate.GenerateBase(config); err != nil {
+			return fmt.Errorf("generate base: %w", err)
 		}
 
-		fmt.Printf("Project %s ready for beign setup with %s architecture\n", projectName, archFlag)
+		cmd.Printf(`Project %s created successfully.
+
+Next steps:
+cd %s
+goforge setup
+
+You can also edit goforge.yaml file before running setup command.
+Use "goforge setup --help" to see all available commands.
+`, projectName, projectName)
+
+		return nil
 	},
 }
 

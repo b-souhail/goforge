@@ -17,14 +17,19 @@ func CreateYaml(cfg models.Config) error {
 	yamlPath := filepath.Join(cfg.Path, "goforge.yaml")
 	file, err := os.Create(yamlPath)
 	if err != nil {
-		return err
-	}
+		return fmt.Errorf("create yaml file: %w", err)}
 	defer file.Close()
 
 	encoder := yaml.NewEncoder(file)
 	defer encoder.Close()
 
-	cfg.Layers = models.GetLayers(cfg.Architecture)
+	layers, err := models.GetLayers(cfg.Architecture)
+	if err != nil {
+		return err
+	}
+
+	cfg.Layers = layers
+
 	return encoder.Encode(cfg)
 }
 
@@ -57,11 +62,26 @@ func CreateMain(cfg models.Config) error {
 }
 
 func InitGoModules(cfg models.Config) error {
-	cmd := exec.Command("go", "mod", "init",cfg.Name)
+	cmd := exec.Command("go", "mod", "init", cfg.Name)
 	cmd.Dir = cfg.Name
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return fmt.Errorf("go mod init error: %v - %s", err, string(out))
+		return fmt.Errorf("go modules init failed: %v - %s", err, string(out))
 	}
+	return nil
+}
+
+func GenerateBase(config models.Config) error {
+
+	if err := CreateYaml(config); err != nil { //ok
+		return err
+	}
+	if err := CreateMain(config); err != nil { //not ok //remove magic number && set the errors
+		return err
+	}
+	if err := InitGoModules(config); err != nil {//ok
+		return err
+	}
+
 	return nil
 }

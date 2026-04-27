@@ -1,10 +1,12 @@
 package models
 
-type architectures struct {
+import "fmt"
+
+type Architectures struct {
 	Layers []Layer
 }
 
-var Architectures = map[string]architectures{
+var architectures = map[string]Architectures{
 	"clean": {
 		Layers: []Layer{
 			{Name: "domain", Dirs: []string{"entity", "repository"}},
@@ -22,11 +24,10 @@ var Architectures = map[string]architectures{
 	},
 }
 
-// falls back to clean if the architecture is unknown. (available for the m mvc clean)
-// microservices // improve clean archi by introducing DDD for domain layer 
-func GetLayers(arch string) []Layer {
-	if arch, exist := Architectures[arch]; exist {
-		return arch.Layers
+func GetLayers(name string) ([]Layer, error) {
+	architecture, ok := architectures[name]
+	if !ok {
+		return nil, fmt.Errorf("architecture %s not available or unknown", name)
 	}
-	return Architectures["clean"].Layers
+	return architecture.Layers, nil
 }
