@@ -25,7 +25,7 @@ MVC architecture based on Model, View and Controller layers.
 
 Examples:
 
-  goforge init                        # creates my-app/ folder && goforge.yaml file whit clean architecture
+  goforge init                        # creates my-project/ folder && goforge.yaml file whit clean architecture
   goforge init myproject --arch mvc   # creates myproject/ folder && goforge.yaml file  with mvc architecture
 
  }
@@ -33,8 +33,8 @@ Examples:
 `,
 	Args: cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		//fallback to project name if no name provided
-		projectName := "my-app" //default name
+		//fallback to projectName if no name provided
+		projectName := "my-project" //default name
 
 		if len(args) == 1 {
 			projectName = args[0]
@@ -42,7 +42,7 @@ Examples:
 
 		projectPath, _ := os.Getwd()
 		projectPath = filepath.Join(projectPath, projectName)
-
+		
 		if _, err := os.Stat(projectPath); err == nil {
 			return fmt.Errorf("directory %s already exists\n", projectName)
 		}
