@@ -18,9 +18,10 @@ var templatesFS embed.FS
 
 func ScaffoldConfig(c models.Config) error {
 	modules := strings.Split(c.Modules, ",")
+	projectName := strings.Split(c.Path, "/")
 
 	for _, l := range c.Layers {
-		lPath :=  l.Name
+		lPath := filepath.Join(projectName[len(projectName)-1], "internal", l.Name)
 		if err := os.MkdirAll(lPath, 0755); err != nil {
 			return err
 		}

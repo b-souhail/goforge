@@ -5,7 +5,6 @@ import (
 	"goforge/internal/generate"
 	"goforge/internal/models"
 	"os"
-	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -32,7 +31,7 @@ Examples:
 			configPath = args[0]
 		}
 
-		data, err := os.ReadFile(configPath)
+		data, err := os.ReadFile("ok/" + configPath)
 		if err != nil {
 			fmt.Println("file : goforge.yaml , not found")
 			fmt.Println("Run  : goforge setup ./pathTo/goforge.yaml")
@@ -45,11 +44,6 @@ Examples:
 			return
 		}
 
-		config.Path = filepath.Dir(configPath)
-		if err := os.Chdir(config.Path); err != nil {
-			fmt.Println("error :", err)
-			return
-		}
 		if config.Modules != "" && modulesFlag != "" {
 			fmt.Println("cannot use shorthand flag and yaml file to configure")
 			return
