@@ -27,11 +27,7 @@ Examples:
   `,
 	Run: func(cmd *cobra.Command, args []string) {
 		configPath := "goforge.yaml"
-		if len(args) > 0 {
-			configPath = args[0]
-		}
-
-		data, err := os.ReadFile("ok/" + configPath)
+		data, err := os.ReadFile(configPath)
 		if err != nil {
 			fmt.Println("file : goforge.yaml , not found")
 			fmt.Println("Run  : goforge setup ./pathTo/goforge.yaml")
