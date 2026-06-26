@@ -1,7 +1,12 @@
 package main
 
-import "goforge/cmd"
+import (
+	"goforge/cmd"
+	"os"
+)
 
 func main() {
-	cmd.Execute()
+	if err := cmd.Execute(); err != nil {
+		os.Exit(1)
+	}
 }

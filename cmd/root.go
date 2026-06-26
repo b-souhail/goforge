@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"os"
-
 	"github.com/spf13/cobra"
 )
 
@@ -37,11 +35,9 @@ Use "goforge --help" for more information about a command`,
 	// Run: func(cmd *cobra.Command, args []string) { // TODO set up a conv whit the cli  },
 }
 
-func Execute() {
+func Execute() error {
 	err := rootCmd.Execute()
-	if err != nil {
-		os.Exit(1)
-	}
+	return err
 }
 
 func init() {

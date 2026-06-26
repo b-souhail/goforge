@@ -7,7 +7,7 @@ type Layer struct {
 }
 
 type Config struct {
-	Path         string  `yaml:"-"` // runtime
+	Path         string  `yaml:"path"` // runtime
 	Name         string  `yaml:"name"`
 	Architecture string  `yaml:"architecture"`
 	Modules      string  `yaml:"modules"`
