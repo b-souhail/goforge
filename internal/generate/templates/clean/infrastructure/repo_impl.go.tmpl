@@ -1,15 +1,34 @@
-package repositories
+package repository
 
-type {{.Module}}Repo struct {
-	db *sql.DB //////////
+import (
+	"{{.ModulePath}}/internal/domain/entity"
+	domainrepo "{{.ModulePath}}/internal/domain/repository"
+)
+
+type {{.Module}}Repository struct {
+	db *sql.DB
 }
 
+func New{{.Module}}Repository(db *sql.DB) domainrepo.{{.Module}}Repository {
+	return &{{.Module}}Repository{db: db}
+}
 
-func New{{.Module}}Repo(db *sql.DB) repositories.{{.Module}}Repo {
-	return &{{.Module}}Repo{db: db}/////////
+func ({{.Receiver}} *{{.Module}}Repository) Create(e entity.{{.Module}}) error {
+	// TODO: implement
+	return nil
 }
-//
-func ({{.Receiver}} *{{.Module}}Repo) Get{{.Module}}(userId string)  {
-	
+
+func ({{.Receiver}} *{{.Module}}Repository) Read(id int) (entity.{{.Module}}, error) {
+	// TODO: implement
+	return entity.{{.Module}}{}, nil
 }
-///////////////////////////////////////////////////////:
+
+func ({{.Receiver}} *{{.Module}}Repository) Update(id int, changes any) error {
+	// TODO: implement
+	return nil
+}
+
+func ({{.Receiver}} *{{.Module}}Repository) Delete(id int) error {
+	// TODO: implement
+	return nil
+}

@@ -1,11 +1,8 @@
-//this folder can be ignored for small project (a cmd will deal 
-// whit it)
-
 package dtos
 
+// {{.Module}}Data holds raw input data sent by the client
 type {{.Module}}Data struct {
-	Name string  `json:"name"`
-	Email string  `json:"email"`
-	//todo : all raw input data sent by the client here
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	// TODO: add your fields
 }
-

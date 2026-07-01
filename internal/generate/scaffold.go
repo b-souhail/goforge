@@ -16,11 +16,13 @@ import (
 //go:embed templates/*
 var templatesFS embed.FS
 
-func ScaffoldConfig(c models.Config) error {
+func ScaffoldConfig(c *models.Config) error {
 	modules := strings.Split(c.Modules, ",")
+	projectName := strings.Split(c.Path, "/")
+	c.Name = projectName[len(projectName)-1]
 
 	for _, l := range c.Layers {
-		lPath :=  l.Name
+		lPath := filepath.Join(projectName[len(projectName)-1], "internal", l.Name)
 		if err := os.MkdirAll(lPath, 0755); err != nil {
 			return err
 		}
@@ -45,7 +47,7 @@ func ScaffoldConfig(c models.Config) error {
 					continue
 				}
 
-				if err := generateFile(templateDir, subPath, entry.Name(), module); err != nil {
+				if err := generateFile(c,templateDir, subPath, entry.Name(), module); err != nil {
 					return err
 				}
 
@@ -57,7 +59,7 @@ func ScaffoldConfig(c models.Config) error {
 	return nil
 }
 
-func generateFile(templateDir, destDir, tmplName, module string) error {
+func generateFile(c *models.Config, templateDir, destDir, tmplName, module string) error {
 	tmplPath := filepath.Join(templateDir, tmplName)
 	data, err := templatesFS.ReadFile(tmplPath)
 	if err != nil {
@@ -84,6 +86,7 @@ func generateFile(templateDir, destDir, tmplName, module string) error {
 	err = tmpl.Execute(&buf, map[string]string{
 		"Module":   format,
 		"Receiver": strings.ToLower(string(module[0])),
+		"ModulePath": c.Name,
 	})
 	if err != nil {
 		return err
