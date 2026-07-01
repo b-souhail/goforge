@@ -11,7 +11,7 @@ var architectures = map[string]Architectures{
 		Layers: []Layer{
 			{Name: "domain", Dirs: []string{"entity", "repository"}},
 			{Name: "application", Dirs: []string{"dtos", "usecases"}},
-			{Name: "infrastructure", Dirs: []string{"repository"}},
+			{Name: "infrastructure", Dirs: []string{}},
 			{Name: "delivery", Dirs: []string{}},
 		},
 	},

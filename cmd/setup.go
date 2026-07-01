@@ -30,7 +30,6 @@ Examples:
 		data, err := os.ReadFile(configPath)
 		if err != nil {
 			fmt.Println("file : goforge.yaml , not found")
-			fmt.Println("Run  : goforge setup ./pathTo/goforge.yaml")
 			return
 		}
 
@@ -48,7 +47,7 @@ Examples:
 			config.Modules = modulesFlag
 		}
 
-		if err := generate.ScaffoldConfig(config); err != nil {
+		if err := generate.ScaffoldConfig(&config); err != nil {
 			fmt.Println("error :", err)
 			return
 		}

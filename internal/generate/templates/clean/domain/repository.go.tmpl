@@ -1,9 +1,10 @@
 package repository
 
-type {{.Module}}Repo interface {
-    Create(entity.{{.Module}}) error
-        Read(id int) (entity.{{.Module}},error)
-                Update(id int,Changes any) error
-    Delete(id int) error
-    // TODO : declare the contract 
+import "{{.ModulePath}}/internal/domain/entity"
+
+type {{.Module}}Repository interface {
+	Create(e entity.{{.Module}}) error
+	Read(id int) (entity.{{.Module}}, error)
+	Update(id int, changes any) error
+	Delete(id int) error
 }
