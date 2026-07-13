@@ -2,15 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"goforge/internal/generate"
-	"goforge/internal/models"
-	"os"
+	"goforge/internal/resources"
+	"goforge/internal/utils"
 
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
-var modulesFlag string
 var setupCmd = &cobra.Command{
 	Use:   "setup [config-path]",
 	Short: "Scaffold project layers from goforge.yaml",
@@ -21,47 +18,28 @@ in the file, setup will create them too.
 no flags needed.
  
 Examples:
+
   goforge setup                          // reads ./goforge.yaml
-  goforge setup ./myproject/goforge.yaml // reads a config at a given path
 
   `,
-	Run: func(cmd *cobra.Command, args []string) {
-		configPath := "goforge.yaml"
-		data, err := os.ReadFile(configPath)
+	RunE: func(cmd *cobra.Command, args []string) error {
+		config, err := utils.ReadBlueprint("z/" + utils.BlueprintFileName)
 		if err != nil {
-			fmt.Println("file : goforge.yaml , not found")
-			return
+			return fmt.Errorf("error reading blueprint: %w", err)
 		}
 
-		var config models.Config
-		if err := yaml.Unmarshal(data, &config); err != nil {
-			fmt.Printf("Failed to parse '%s': %v\n", configPath, err)
-			return
+		for _, v := range config.Resources {
+			definition := resources.Registry[v.Name]
+			res := definition.Files(v)
+			for _, v := range res {
+				fmt.Println(v.Output)
+			}
 		}
 
-		if config.Modules != "" && modulesFlag != "" {
-			fmt.Println("cannot use shorthand flag and yaml file to configure")
-			return
-		}
-		if modulesFlag != "" {
-			config.Modules = modulesFlag
-		}
-
-		if err := generate.ScaffoldConfig(&config); err != nil {
-			fmt.Println("error :", err)
-			return
-		}
+		return nil
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(setupCmd)
-	setupCmd.Flags().StringVarP(
-		&modulesFlag,
-		"modules",
-		"m",
-		"",
-		"Modules to generate (comma separated: user,post,like)",
-	)
-
 }

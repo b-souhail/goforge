@@ -1,0 +1,101 @@
+package resources
+
+import (
+	"fmt"
+	"goforge/internal/models"
+)
+
+type HTTP struct{}
+
+func (HTTP) Name() string {
+	return "http"
+}
+
+func (HTTP) Questions() []*models.Question {
+	return []*models.Question{
+		{
+			Key:  "middleware",
+			Text: "Do you want customized middlewares?",
+
+			Next: &models.Question{
+				Key:     "middlewares",
+				Text:    "Select middleware",
+				Options: []string{"cors", "limiter"},
+			},
+		},
+		{
+			Key:  "websocket",
+			Text: "Do you want websocket?",
+
+			Next: &models.Question{
+				Key:  "hub",
+				Text: "Enable websocket hub?",
+			},
+		},
+	}
+}
+
+func (HTTP) Files(res models.Resource) []models.GenerateFile {
+	files := []models.GenerateFile{
+		{
+			Template: "resources/http/routes.go.tmpl",
+			Output:   "internal/delivery/http/routes.go",
+		},
+	}
+
+	if middlewares, ok := res.Params["middlewares"].([]any); ok {
+		for _, mw := range middlewares {
+			name := mw.(string)
+
+			files = append(files, models.GenerateFile{
+				Template: fmt.Sprintf("resources/http/middlewares/%s.go.tmpl", name),
+				Output:   fmt.Sprintf("internal/delivery/http/middlewares/%s.go", name),
+			})
+		}
+	}
+
+	if res.Params["websocket"].(bool) {
+		temp := models.GenerateFile{
+			Template: "resources/http/websocket/ws.go.tmpl",
+			Output:   "internal/delivery/websocket/ws.go",
+		}
+		files = append(files, temp)
+	}
+	if res.Params["hub"] != nil && res.Params["hub"].(bool) {
+		temp := []models.GenerateFile{
+			{
+				Template: "resources/http/websocket/hub.go.tmpl",
+				Output:   "internal/delivery/websocket/hub.go",
+			},
+			{
+				Template: "resources/http/websocket/connection.go.tmpl",
+				Output:   "internal/delivery/websocket/connection.go",
+			},
+		}
+		files = append(files, temp...)
+	}
+
+	return files
+}
+
+func (HTTP) BuildConfig(a models.Answers) models.Resource {
+	params := make(map[string]any)
+
+	if a["websocket"].(bool) {
+		params["websocket"] = a["websocket"].(bool)
+		params["hub"] = a["hub"].(bool)
+	} else {
+		params["websocket"] = a["websocket"].(bool)
+	}
+	if a["middleware"].(bool) {
+		params["middleware"] = a["middleware"].(bool)
+		params["middlewares"] = a["middlewares"].([]string)
+	} else {
+		params["middleware"] = a["middleware"].(bool)
+	}
+
+	return models.Resource{
+		Name:   "http",
+		Params: params,
+	}
+}

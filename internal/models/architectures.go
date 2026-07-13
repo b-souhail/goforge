@@ -1,33 +1,14 @@
 package models
 
-import "fmt"
-
-type Architectures struct {
-	Layers []Layer
+type Layer struct {
+	Name string   `yaml:"name"`
+	Dirs []string `yaml:"directory"`
 }
 
-var architectures = map[string]Architectures{
-	"clean": {
-		Layers: []Layer{
-			{Name: "domain", Dirs: []string{"entity", "repository"}},
-			{Name: "application", Dirs: []string{"dtos", "usecases"}},
-			{Name: "infrastructure", Dirs: []string{}},
-			{Name: "delivery", Dirs: []string{}},
-		},
-	},
-	"mvc": {
-		Layers: []Layer{
-			{Name: "models", Dirs: []string{}},
-			{Name: "views", Dirs: []string{}},
-			{Name: "controllers", Dirs: []string{}},
-		},
-	},
+var Architecture = []Layer{
+	{Name: "domain"},
+	{Name: "application"},
+	{Name: "infrastructure"},
+	{Name: "delivery"},
 }
 
-func GetLayers(name string) ([]Layer, error) {
-	architecture, ok := architectures[name]
-	if !ok {
-		return nil, fmt.Errorf("architecture %s not available or unknown", name)
-	}
-	return architecture.Layers, nil
-}

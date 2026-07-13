@@ -1,0 +1,18 @@
+package websocket
+
+import "github.com/gorilla/websocket"
+
+// Connection represents a single WebSocket connection.
+//
+// This type is intentionally minimal and transport-oriented.
+// It does not represent a user, product, device, or any business entity.
+//
+// Feel free to rename it or extend it with your own fields
+// (User, Product, Room, Session, Metadata, etc.).
+type Connection struct {
+	// Underlying WebSocket connection.
+	Conn *websocket.Conn
+
+	// Outgoing messages.
+	Send chan []byte
+}

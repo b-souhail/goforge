@@ -1,0 +1,44 @@
+package websocket
+
+import (
+	"log"
+	"net/http"
+
+	"github.com/gorilla/websocket"
+)
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin: func(r *http.Request) bool {
+		// TODO(me): check cors
+		//idea : if the middleware cors is used then automate check origin
+		return true
+	},
+}
+
+func ServeWs(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Printf("websocket: upgrade failed: %v", err)
+		return
+	}
+	defer conn.Close()
+
+	//TODO:check the user is authenticated and authorized to use the websocket connection or whatever 
+
+	for {
+		messageType, message, err := conn.ReadMessage()
+		if err != nil {
+			log.Printf("websocket: read failed: %v", err)
+			break
+		}
+
+		// TODO: echo the message back to the client or handle it as you  
+
+		if err := conn.WriteMessage(messageType, message); err != nil {
+			log.Printf("websocket: write failed: %v", err)
+			break
+		}
+	}
+}
