@@ -1,137 +1,119 @@
-# GoForge
+<div align="center">
+  <img src="docs/assets/go_at_forge.png" alt="GoForge" width="450">
+</div>
 
-> A CLI tool to scaffold and evolve layered Go backend architectures.
+<h1 align="center">🔨 GoForge</h1>
 
-GoForge automates the repetitive parts of starting a Go backend project , folder structure, boilerplate files, architectural layers . So you can focus on writing real code from minute one.
+GoForge is an open-source CLI that scaffolds modern Go applications with a production-ready architecture.
+
+Instead of manually creating folders, wiring dependencies, configuring HTTP servers, or repeating the same project setup, GoForge generates a clean foundation so you can immediately focus on your business logic.
+
+> Generate production-ready Go applications in minutes, not hours.
+
+
+<div align="center">
+
+[Quick Start](/docs/getting-started.md)⛔•
+[Installation](/docs/installation.md)⛔•
+[Commands](/docs/commands.md)⛔•
+[📄 Blueprint](/docs/blueprint.md) •
+[ Modules](/docs/modules.md)⛔•
+[🌐 Resources](/docs/resources.md) •
+[🏛️ Architecture](/docs/architecture.md) •
+[Templates](/docs/templates.md) ⛔ •
+[Examples](/docs/examples.md) ⛔ •
+[Roadmap](/docs/roadmap.md) ⛔•
+[FAQ](/docs/faq.md) ⛔
+
+</div>
+
+<h2 align="center">✨ Features</h2>
+
+<div align="center">
+
+• 🗄️ Database resources (MySQL, PostgreSQL...)<br>
+• 📁 Production-ready project structure<br>
+• 🏛️ Clean Architecture scaffolding<br>
+• ⚡ Redis support *(coming soon)* <br>
+• 🧱 Extensible resource system<br>
+• 🌐 HTTP server generation<br>
+• 🔁 Idempotent generation<br>
+• 🐳 Docker configuration<br>
+• 🧩 Module generation<br>
+• 🔌 WebSocket support<br>
+• 📄 YAML Blueprint<br>
+
+</div>
 
 ---
 
-## Who is it for?
+<h2 align="center">🚀 Quick Start</h2>
 
-Developers who want to build clean, structured Go backend services quickly, without losing control over their code.
-
----
-
-## How it works
-
-```
-goforge init
-cd my-app
-goforge setup 
-```
-
-`init` creates the project folder and a `goforge.yaml` config file.  
-`setup` reads that config and scaffolds the full folder structure with generated boilerplate files per module.
-
----
-
-## Commands
-
-### `goforge init [projectName]`
-
-Initializes a new project with a `goforge.yaml` config file .
+In most cases, creating a new project only takes three commands:
 
 ```bash
-goforge init                        # creates my-app/ with clean arch
-goforge init myproject              # creates myproject/ with clean arch
-goforge init myproject --arch mvc   # creates myproject/ with mvc arch
+goforge init myapp
+cd myapp
+goforge add  http       #or any others resources / modules
+goforge setup
 ```
 
-**Flags:**
-
-| Flag | Shorthand | Default | Description |
-|------|-----------|---------|-------------|
-| `--arch` | `-a` | `clean` | Architecture type: `clean` or `mvc` |
+GoForge reads your `blueprint.yaml` and generates the complete project structure.
 
 ---
 
-### `goforge setup [config-path]`
+<h2 align="center">⚙️ Installation</h2>
 
-Reads `goforge.yaml` and scaffolds all layers, subdirectories, and module files.
+GoForge is currently under active development.
 
 ```bash
-goforge setup                           # reads ./goforge.yaml
-goforge setup ./myproject/goforge.yaml  # reads config at a given path
-```
-
-The yaml is the source of truth. 
-
-**Generated structure (clean arch, module `users`):**
-
-> work in progress
-```
-my-app/
-├── domain/
-│   ├── entity/
-│   │   └── users_entity.go
-│   └── repository/
-│       └── users_repository.go
-├── application/
-│   ├── dtos/
-│   └── usecases/
+# Coming soon
+go install github.com/b-souhail/goforge@latest
 ```
 
 ---
 
-### `goforge doctor` *(in progress)*
+<div align="center">
+<h2>📅 Roadmap</h2>
 
-Scans the project and detects architecture violations , invalid import relationships between layers. 
+|       Version      |       Status      |       Date      |
+| :----------------: | :---------------: | :-------------: |
+|   🎂 **MVP Beta**  | 🔨 In Development | **17 Jul 2026** |
+| 🚀 **Public Beta** |     📋 Planned    | **17 Aug 2026** |
+|  ⭐ **Stable v1.0** |       ⏳ TBD       |     Unknown     |
 
-```bash
-goforge doctor
-```
+</div>
+
+---
+<div align="center">
+<h2>📚 Documentation</h2>
+
+| Document           | Description                          |
+| ------------------ | ------------------------------------ |
+| 🚀 Getting Started | Create your first project            |
+| ⚙️ Installation    | Install and build GoForge            |
+| 📖 Commands        | Complete CLI reference               |
+| 📄 Blueprint       | YAML configuration reference         |
+| 🧩 Modules         | Module generation                    |
+| 🌐 Resources       | HTTP, databases, Redis, WebSocket... |
+| 🏛️ Architecture   | Generated project architecture       |
+| 📦 Templates       | Template system                      |
+| 💡 Examples        | Example projects                     |
+| 🗺️ Roadmap        | Upcoming features                    |
+| ❓ FAQ              | Frequently asked questions           |
+
+</div>
 
 ---
 
-## goforge.yaml
+<h2 align="center">🤝 Contributing</h2>
 
-The config file generated by `init` and read by `setup`:
+GoForge is an open-source side project and contributions are always welcome.
 
-```yaml
-name: my-app
-architecture: clean
-modules: users,posts,comments
-layers:
-  - name: domain
-    dirs:
-      - entity
-      - repository
-  - name: application
-    dirs:
-      - dtos
-      - usecases
-  - name: infrastructure
-    dirs:
-      - repository
-  - name: delivery
-```
-
-You can edit it freely — add layers, add dirs, add modules. `setup` command will create whatever you put in it.
+Whether you're fixing a bug, improving the documentation, proposing a new resource, or suggesting architectural improvements, every contribution helps the project grow.
 
 ---
 
-## Supported Architectures
+<h2 align="center">📄 License</h2>
 
-| Name | Layers |
-|------|--------|
-| `clean` | domain, application, infrastructure, delivery |
-| `mvc` | models, views, controllers |
-
----
-
-## Status
-
-> v0 — work in progress
-
-| Command | Status |
-|---------|--------|
-| `init` | ✅ working |
-| `setup` | ✅ working |
-| `doctor` | 🚧 in progress |
-| `add` | 🚧 in progress |
-
----
-
-## License
-
-MIT
+Released under the **MIT License**.
