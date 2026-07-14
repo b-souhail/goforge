@@ -1,0 +1,23 @@
+package middlewares
+
+import (
+	"net/http"
+
+	"github.com/didip/tollbooth/v7"
+)
+
+func LimitHandler(next http.HandlerFunc) http.HandlerFunc {
+	limiter := tollbooth.NewLimiter(3, nil) // 3 requests per seconde
+	limiter.SetMessage("Trop de requêtes, réessaie plus tard.")
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		// vérifie la limite
+		if httpError := tollbooth.LimitByRequest(limiter, w, r); httpError != nil {
+			w.Header().Add("Content-Type", limiter.GetMessageContentType())
+			w.WriteHeader(httpError.StatusCode)
+			w.Write([]byte(httpError.Message))
+			return
+		}
+		next.ServeHTTP(w, r)
+	}
+}

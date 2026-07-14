@@ -3,3 +3,4 @@ goforge
 *.out
 .env
 *.txt
+README.md

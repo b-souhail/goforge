@@ -31,8 +31,6 @@ X : no usage until now implementation gonna be done later thx
   goforge init my-app --modules users,posts X
 
 Use "goforge --help" for more information about a command`,
-
-	// Run: func(cmd *cobra.Command, args []string) { // TODO set up a conv whit the cli  },
 }
 
 func Execute() error {

@@ -14,20 +14,20 @@ func New{{.Module}}Usecase(repo repository.{{.Module}}Repository) *{{.Module}}Us
 	return &{{.Module}}Usecase{repo: repo}
 }
 
-func ({{.Receiver}} *{{.Module}}Usecase) Create(data dtos.{{.Module}}Data) error {
+func ({{.Receiver}} *{{.Module}}Usecase) Create{{.Module}}(data dtos.{{.Module}}Dto) error {
 	e := entity.{{.Module}}{}
 	// TODO: map data to entity
 	return {{.Receiver}}.repo.Create(e)
 }
 
-func ({{.Receiver}} *{{.Module}}Usecase) Read(id int) (entity.{{.Module}}, error) {
+func ({{.Receiver}} *{{.Module}}Usecase) Read{{.Module}}(id int) (entity.{{.Module}}, error) {
 	return {{.Receiver}}.repo.Read(id)
 }
 
-func ({{.Receiver}} *{{.Module}}Usecase) Update(id int, changes any) error {
+func ({{.Receiver}} *{{.Module}}Usecase) Update{{.Module}}(id int, changes any) error {
 	return {{.Receiver}}.repo.Update(id, changes)
 }
 
-func ({{.Receiver}} *{{.Module}}Usecase) Delete(id int) error {
+func ({{.Receiver}} *{{.Module}}Usecase) Delete{{.Module}}(id int) error {
 	return {{.Receiver}}.repo.Delete(id)
 }

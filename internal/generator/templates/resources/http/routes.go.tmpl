@@ -1,0 +1,28 @@
+package http
+
+import (
+	"net/http"
+
+	internal "{{.ModulePath}}/internal"
+)
+
+func Routes(app *internal.App) http.Handler {
+	mux := http.NewServeMux()
+
+	// Health
+	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {})
+
+	{{- range .Modules }}
+
+	mux.HandleFunc("GET /{{ . }}", func(w http.ResponseWriter, r *http.Request) {})
+	mux.HandleFunc("POST /{{ . }}", func(w http.ResponseWriter, r *http.Request) {})
+
+	{{- end }}
+
+	{{if .HTTP.Websocket}}
+    mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {})
+    {{end}}
+
+
+	return mux
+}
