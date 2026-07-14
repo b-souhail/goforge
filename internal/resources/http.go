@@ -56,20 +56,20 @@ func (HTTP) Files(res models.Resource) []models.GenerateFile {
 
 	if res.Params["websocket"].(bool) {
 		temp := models.GenerateFile{
-			Template: "resources/http/websocket/ws.go.tmpl",
-			Output:   "internal/delivery/websocket/ws.go",
+			Template: "resources/http/websockets/ws.go.tmpl",
+			Output:   "internal/delivery/websockets/ws.go",
 		}
 		files = append(files, temp)
 	}
 	if res.Params["hub"] != nil && res.Params["hub"].(bool) {
 		temp := []models.GenerateFile{
 			{
-				Template: "resources/http/websocket/hub.go.tmpl",
-				Output:   "internal/delivery/websocket/hub.go",
+				Template: "resources/http/websockets/hub.go.tmpl",
+				Output:   "internal/delivery/websockets/hub.go",
 			},
 			{
-				Template: "resources/http/websocket/connection.go.tmpl",
-				Output:   "internal/delivery/websocket/connection.go",
+				Template: "resources/http/websockets/connection.go.tmpl",
+				Output:   "internal/delivery/websockets/connection.go",
 			},
 		}
 		files = append(files, temp...)

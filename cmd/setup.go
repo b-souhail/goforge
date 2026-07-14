@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"goforge/internal/resources"
+	"goforge/internal/generator"
 	"goforge/internal/utils"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -23,20 +24,38 @@ Examples:
 
   `,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		config, err := utils.ReadBlueprint("z/" + utils.BlueprintFileName)
+		config, err := utils.ReadBlueprint("zz/" + utils.BlueprintFileName)
 		if err != nil {
 			return fmt.Errorf("error reading blueprint: %w", err)
 		}
 
-		for _, v := range config.Resources {
-			definition := resources.Registry[v.Name]
-			res := definition.Files(v)
-			for _, v := range res {
-				fmt.Println(v.Output)
-			}
+		if err := utils.InitGoModules(config.Name); err != nil {
+			return fmt.Errorf("error Go modules: %w", err)
 		}
 
-		return nil
+		for _, module := range config.Modules {
+			files := generator.ModuleFiles(module)
+			for _, file := range files {
+				if err := generator.Generate(file, *config, map[string]any{
+					"Module":     strings.ToUpper(string(module[0])) + module[1:],
+					"Receiver":   strings.ToLower(string(module[0])),
+					"ModulePath": config.Name,
+				}); err != nil {
+					fmt.Printf("erreur génération %s: %v\n", file.Output, err)
+				}
+			}
+
+		}
+
+		// for _, v := range config.Resources {
+		// 	definition := resources.Registry[v.Name]
+		// 	files := definition.Files(v)
+		// 	for _, file := range files {
+		// 		generator.Generate(file, *config, map[string]any{})
+		// 	}
+		// }
+
+		return utils.TidyModules(config)
 	},
 }
 

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"slices"
 	"fmt"
 	"goforge/internal/models"
 	"os"
@@ -11,6 +12,8 @@ import (
 
 // dlta
 const BlueprintFileName = "blueprint.yaml" //dlta
+var Layers = []string{"domain","application","infrastructure","delivery",
+}
 
 func ReadBlueprint(FileName string) (*models.Config, error) {
 	data, err := os.ReadFile(FileName)
@@ -26,7 +29,7 @@ func ReadBlueprint(FileName string) (*models.Config, error) {
 }
 
 func SaveBlueprint(cfg *models.Config) error {
-	path := filepath.Join(cfg.Path, BlueprintFileName)
+	path := filepath.Join(cfg.Path,cfg.Name, BlueprintFileName)
 
 	file, err := os.Create(path)
 	if err != nil {
@@ -46,7 +49,7 @@ func SaveBlueprint(cfg *models.Config) error {
 }
 
 func CreateBlueprint(cfg *models.Config) error {
-	file, err := os.Create(filepath.Join(cfg.Path, BlueprintFileName))
+	file, err := os.Create(filepath.Join(cfg.Path,cfg.Name ,BlueprintFileName))
 	if err != nil {
 		return fmt.Errorf("create yaml file: %w", err)
 	}
@@ -55,7 +58,7 @@ func CreateBlueprint(cfg *models.Config) error {
 	encoder := yaml.NewEncoder(file)
 	defer encoder.Close()
 
-	cfg.Layers = models.Architecture
+	cfg.Layers = Layers
 
 	return encoder.Encode(cfg)
 }
@@ -67,4 +70,7 @@ func HasResource(cfg *models.Config, name string) bool {
 		}
 	}
 	return false
+}
+func HasModule(config *models.Config, name string) bool {
+    return slices.Contains(config.Modules, name)
 }

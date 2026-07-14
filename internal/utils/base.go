@@ -8,9 +8,9 @@ import (
 
 //nope
 
-func InitGoModules(cfg *models.Config) error {
-	cmd := exec.Command("go", "mod", "init", cfg.Name)
-	cmd.Dir = cfg.Name
+func InitGoModules(name string) error {
+	cmd := exec.Command("go", "mod", "init", name)
+	cmd.Dir = name
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("go modules init failed: %v - %s", err, string(out))

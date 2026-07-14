@@ -2,14 +2,14 @@ package repository
 
 import (
 	"{{.ModulePath}}/internal/domain/entity"
-	domainrepo "{{.ModulePath}}/internal/domain/repository"
+	domain"{{.ModulePath}}/internal/domain/repository"
 )
 
 type {{.Module}}Repository struct {
 	db *sql.DB
 }
 
-func New{{.Module}}Repository(db *sql.DB) domainrepo.{{.Module}}Repository {
+func New{{.Module}}Repository(db *sql.DB) domain.{{.Module}}Repository {
 	return &{{.Module}}Repository{db: db}
 }
 

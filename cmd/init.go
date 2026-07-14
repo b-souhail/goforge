@@ -46,7 +46,13 @@ Examples:
 			return fmt.Errorf("create directory: %w \n", err)
 		}
 
-		config := &models.Config{Path: projectPath, Name: projectName}
+		mypath, err := os.Getwd()
+		if err != nil {
+			return fmt.Errorf("create directory: %w \n", err)
+
+		}
+
+		config := &models.Config{Path: mypath, Name: projectName}
 
 		if err := utils.CreateBlueprint(config); err != nil {
 			return fmt.Errorf("generate base: %w", err)
