@@ -17,7 +17,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func ServeWs(w http.ResponseWriter, r *http.Request) {
+func ServeWs(w http.ResponseWriter, r *http.Request {{if .HTTP.Hub}} ,hub Hub  {{end}}) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("websocket: upgrade failed: %v", err)

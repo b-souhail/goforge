@@ -21,9 +21,17 @@ func (MySQL) Files(res models.Resource) []models.GenerateFile {
 
 	files := []models.GenerateFile{
 		{
-			Template: "resources/database/mysql.go.tmpl",
-			Output:   "internal/infrastructure/database/db.go",
+			Template: "resources/database/mysql/config.go.tmpl",
+			Output:   "internal/infrastructure/database/mysql/config.go",
+		},
+		{
+			Template: "resources/database/mysql/connection.go.tmpl",
+			Output:   "internal/infrastructure/database/mysql/connection.go",
 		},
 	}
 	return files
+}
+func (MySQL) Data(cfg models.Config,res models.Resource) (any,any) {
+
+	return  nil,nil
 }

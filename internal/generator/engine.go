@@ -77,9 +77,6 @@ func Generate(file models.GenerateFile, config models.Config, params any) error 
 
 	formatted, fmtErr := imports.Process(output, buf.Bytes(), &imports.Options{})
 	if fmtErr != nil {
-		// goimports a échoué (souvent une erreur de syntaxe dans le template
-		// exécuté) : on écrit quand même le fichier brut pour que le
-		// contenu généré reste visible et débuggable, au lieu de disparaître.
 		if err := os.WriteFile(output, buf.Bytes(), 0644); err != nil {
 			return err
 		}
