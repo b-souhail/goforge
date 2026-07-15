@@ -1,28 +1,24 @@
 package http
-
 import (
 	"net/http"
-
-	internal "{{.ModulePath}}/internal"
+		ws "{{.ModulePath}}/internal/delivery/websockets"
 )
-
-func Routes(app *internal.App) http.Handler {
+func Routes({{if .HTTP.Hub}} hub ws.Hub  {{end}}) http.Handler {
 	mux := http.NewServeMux()
 
 	// Health
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {})
 
-	{{- range .Modules }}
-
-	mux.HandleFunc("GET /{{ . }}", func(w http.ResponseWriter, r *http.Request) {})
-	mux.HandleFunc("POST /{{ . }}", func(w http.ResponseWriter, r *http.Request) {})
-
-	{{- end }}
 
 	{{if .HTTP.Websocket}}
-    mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {})
-    {{end}}
+	mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+	
+		ws.ServeWs(w, r {{if .HTTP.Hub}} ,hub  {{end}})
+	})
+	{{end}}
 
 
-	return mux
+
+
+return {{ .HTTP.Middleware.ReturnExp }}
 }

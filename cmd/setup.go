@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"goforge/internal/generator"
+	"goforge/internal/resources"
 	"goforge/internal/utils"
 	"strings"
 
@@ -34,7 +35,7 @@ Examples:
 		}
 
 		for _, module := range config.Modules {
-			files := generator.ModuleFiles(module)
+			files := config.ModuleFiles(module)
 			for _, file := range files {
 				if err := generator.Generate(file, *config, map[string]any{
 					"Module":     strings.ToUpper(string(module[0])) + module[1:],
@@ -47,13 +48,22 @@ Examples:
 
 		}
 
-		// for _, v := range config.Resources {
-		// 	definition := resources.Registry[v.Name]
-		// 	files := definition.Files(v)
-		// 	for _, file := range files {
-		// 		generator.Generate(file, *config, map[string]any{})
-		// 	}
-		// }
+		for _, res := range config.Resources {
+			definition := resources.Registry[res.Name]
+			files := definition.Files(res)
+			data, name := definition.Data(*config, res)
+			if data == nil {
+				continue
+			} else {
+				fmt.Println(data)
+			}
+			for _, file := range files {
+				generator.Generate(file, *config, map[string]any{
+					name.(string): data,
+					"ModulePath":  config.Name,
+				})
+			}
+		}
 
 		return utils.TidyModules(config)
 	},

@@ -1,10 +1,6 @@
 package websocket
 
-// Hub manages active WebSocket connections and broadcasts messages between them.
-//
-// The Connection type represents a WebSocket connection only. It is not tied to
-// your application's domain (user, product, device, etc.). Feel free to extend
-// or replace it to fit your needs.
+
 type Hub struct {
 	Connections map[*Connection]struct{}
 
@@ -15,7 +11,6 @@ type Hub struct {
 	Unregister chan *Connection
 }
 
-// NewHub creates a new Hub.
 func NewHub() *Hub {
 	return &Hub{
 		Connections: make(map[*Connection]struct{}),
@@ -25,7 +20,6 @@ func NewHub() *Hub {
 	}
 }
 
-// Run starts the hub event loop.
 func (h *Hub) Run() {
 	for {
 		select {

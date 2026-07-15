@@ -2,6 +2,22 @@ package main
 
 func main(){
 
+	{{if .HTTP.Websocket}}
+	cfg, err := mysql.LoadConfigFromEnv()
+if err != nil {
+	fmt.Errorf("invalid mysql config", "error", err)
+	os.Exit(1)
+}
+
+db, err := mysql.Open(cfg)
+if err != nil {
+	fmt.Error("failed to initialize database", "error", err)
+	os.Exit(1)
+}
+defer mysql.Close(db)
+    {{end}}
+
+
 fmt.Println("{{.AppName}} ready ")
 
 }
