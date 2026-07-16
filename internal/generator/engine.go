@@ -7,6 +7,7 @@ import (
 	"goforge/internal/models"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 
 	"golang.org/x/tools/imports"
@@ -14,6 +15,21 @@ import (
 
 //go:embed templates/*
 var templatesFS embed.FS
+
+var Funcs = template.FuncMap{
+	"Capitalize": func(s string) string {
+		if s == "" {
+			return s
+		}
+		return strings.ToUpper(s[:1]) + s[1:]
+	},
+	"Lower": func(s string) string {
+		if s == "" {
+			return s
+		}
+		return strings.ToLower(s)
+	},
+}
 
 // func Generate(file models.GenerateFile, config models.Config, params any) error {
 
@@ -58,11 +74,10 @@ func Generate(file models.GenerateFile, config models.Config, params any) error 
 		return err
 	}
 
-	tmpl, err := template.New(filepath.Base(file.Template)).Parse(string(data))
+	tmpl, err := template.New(filepath.Base(file.Template)).Funcs(Funcs).Parse(string(data))
 	if err != nil {
-		return err
+		fmt.Println(err)
 	}
-
 	var buf bytes.Buffer
 
 	if err := tmpl.Execute(&buf, params); err != nil {
@@ -89,9 +104,6 @@ func Generate(file models.GenerateFile, config models.Config, params any) error 
 
 	return nil
 }
-
-
-
 
 // //go:embed templates/*
 // var templatesFS embed.FS
@@ -162,7 +174,7 @@ func Generate(file models.GenerateFile, config models.Config, params any) error 
 // 		"Receiver":   strings.ToLower(string(module[0])),
 // 		"ModulePath": cfg.Name,
 // 	})
-// 	if err != nil {  
+// 	if err != nil {
 // 		return err
 // 	}
 // 	if err := os.WriteFile(fullPath, buf.Bytes(), 0644); err != nil {

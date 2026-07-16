@@ -48,19 +48,19 @@ Examples:
 
 		}
 
-		for _, res := range config.Resources {
-			definition := resources.Registry[res.Name]
+		for _, res := range config.Resources { //http
+
+			definition := resources.Registry[res.Name] //registry method
+
 			files := definition.Files(res)
-			data, name := definition.Data(*config, res)
-			if data == nil {
-				continue
-			} else {
-				fmt.Println(data)
-			}
+
+			data := definition.Data(*config, res)
+			fmt.Println(definition.Name(), data)
+
 			for _, file := range files {
 				generator.Generate(file, *config, map[string]any{
-					name.(string): data,
-					"ModulePath":  config.Name,
+					strings.ToUpper(definition.Name()): data,
+					"ModulePath":                       config.Name,
 				})
 			}
 		}

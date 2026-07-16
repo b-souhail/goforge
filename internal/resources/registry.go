@@ -1,8 +1,12 @@
 package resources
 
-import "goforge/internal/models"
+import (
+	"goforge/internal/models"
+	"goforge/internal/resources/http"
+	"goforge/internal/resources/mysql"
+)
 
 var Registry = map[string]models.ResourceDefinition{
-    "http":  HTTP{},
-    "mysql": MySQL{},
+	"http":  http.HTTP{},
+	"mysql": mysql.MySQL{},
 }
