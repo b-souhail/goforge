@@ -2,23 +2,27 @@ package http
 import (
 	"net/http"
 		ws "{{.ModulePath}}/internal/delivery/websockets"
+		mw "{{.ModulePath}}/internal/delivery/http/middlewares"
+		handler "zz/internal/delivery/http/handlers"
 )
+
 func Routes({{if .HTTP.Hub}} hub ws.Hub  {{end}}) http.Handler {
 	mux := http.NewServeMux()
 
 	// Health
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {})
+	{{- range .HTTP.Modules }}
+	mux.HandleFunc("GET /{{ . }}", {{ printf $.HTTP.Middleware.HandleFuncExp (printf "handler.Handle%s" (Capitalize .) ) }})
+	mux.HandleFunc("POST /{{ . }}", {{ printf $.HTTP.Middleware.HandleFuncExp (printf "handler.Handle%s" (Capitalize .) ) }})
+	{{- end }}
 
 
 	{{if .HTTP.Websocket}}
 	mux.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-	
+						//TODO:
 		ws.ServeWs(w, r {{if .HTTP.Hub}} ,hub  {{end}})
 	})
 	{{end}}
 
-
-
-
-return {{ .HTTP.Middleware.ReturnExp }}
+return {{ .HTTP.Middleware.HandlerExp }}
 }

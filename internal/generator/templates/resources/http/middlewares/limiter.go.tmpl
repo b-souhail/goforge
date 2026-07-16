@@ -6,7 +6,7 @@ import (
 	"github.com/didip/tollbooth/v7"
 )
 
-func LimitHandler(next http.HandlerFunc) http.HandlerFunc {
+func Limiter(next http.HandlerFunc) http.HandlerFunc {
 	limiter := tollbooth.NewLimiter(3, nil) // 3 requests per seconde
 	limiter.SetMessage("Trop de requêtes, réessaie plus tard.")
 

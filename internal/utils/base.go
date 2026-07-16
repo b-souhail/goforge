@@ -6,8 +6,6 @@ import (
 	"os/exec"
 )
 
-//nope
-
 func InitGoModules(name string) error {
 	cmd := exec.Command("go", "mod", "init", name)
 	cmd.Dir = name

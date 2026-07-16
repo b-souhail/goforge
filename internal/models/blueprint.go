@@ -12,6 +12,7 @@ type Config struct {
 	Resources []Resource `yaml:"resources"`
 }
 
+//dlta
 func (Config)ModuleFiles(module string) []GenerateFile {
 	return []GenerateFile{
 		{
@@ -33,6 +34,12 @@ func (Config)ModuleFiles(module string) []GenerateFile {
 		{
 			Template: "clean/infrastructure/repository/repo_impl.go.tmpl",
 			Output:   fmt.Sprintf("internal/infrastructure/repository/%s_repo_impl.go", module),
+		},{
+			Template: "resources/http/handlers/handler.go.tmpl",
+			Output:   fmt.Sprintf("internal/delivery/http/handlers/%s_handlers.go", module),
+		},{
+			Template: "resources/http/handlers/response/response.go.tmpl",
+			Output:   "internal/delivery/http/handlers/response/response.go",
 		},
 	}
 }

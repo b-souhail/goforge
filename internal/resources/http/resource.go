@@ -1,4 +1,4 @@
-package resources
+package http
 
 import (
 	"fmt"
@@ -101,41 +101,4 @@ func (HTTP) BuildConfig(a models.Answers) models.Resource {
 		Name:   "http",
 		Params: params,
 	}
-}
-
-type HTTPData struct {
-	Modules    []string
-	Websocket  bool
-	Hub        bool
-	Middleware middleware
-}
-
-type middleware struct {
-	ReturnExp string
-}
-
-func (HTTP) Data(config models.Config, res models.Resource) (any, any) {
-
-	data := HTTPData{
-		Modules:   config.Modules,
-		Websocket: res.Params["websocket"].(bool),
-		Hub:       res.Params["hub"].(bool),
-	}
-
-	expr := "mux"
-
-	if res.Params["middleware"].(bool) {
-		for _, mw := range res.Params["middlewares"].([]string) {
-			switch mw {
-			case "secure_headers":
-				expr = fmt.Sprintf("MW.SecureHeaders(%s)", expr)
-
-			case "cors":
-				expr = fmt.Sprintf("MW.CORSMiddleware(%s)", expr)
-			}
-		}
-	}
-	data.Middleware.ReturnExp = expr
-
-	return data, "HTTP"
 }

@@ -14,6 +14,6 @@ type ResourceDefinition interface {
 	Name() string
 	Questions() []*Question
 	BuildConfig(Answers) Resource
-	Files(Res Resource) []GenerateFile
-	Data(cfg Config,Res Resource,) (any,any)
+	Files(Resource) []GenerateFile
+	Data(Config,Resource)any
 }

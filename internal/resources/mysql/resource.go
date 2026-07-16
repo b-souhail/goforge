@@ -1,4 +1,4 @@
-package resources
+package mysql
 
 import "goforge/internal/models"
 
@@ -8,13 +8,21 @@ func (MySQL) Name() string {
 	return "mysql"
 }
 func (MySQL) Questions() []*models.Question {
+
+	// What type of storage do you want to add?
+
+	//   SQL Database 
+	//   Cache
+	//   Search Engine
+	//   Document Database
+	//   Message Broker
+	
 	return []*models.Question{}
 }
 func (MySQL) BuildConfig(a models.Answers) models.Resource {
 	return models.Resource{
-		Name: "mysql",
-		Params: map[string]any{
-		},
+		Name:   "mysql",
+		Params: map[string]any{},
 	}
 }
 func (MySQL) Files(res models.Resource) []models.GenerateFile {
@@ -30,8 +38,4 @@ func (MySQL) Files(res models.Resource) []models.GenerateFile {
 		},
 	}
 	return files
-}
-func (MySQL) Data(cfg models.Config,res models.Resource) (any,any) {
-
-	return  nil,nil
 }
