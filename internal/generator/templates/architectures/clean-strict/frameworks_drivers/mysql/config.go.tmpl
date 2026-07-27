@@ -1,0 +1,36 @@
+package mysql
+
+import (
+	"fmt"
+	"os"
+	"time"
+)
+
+type Config struct {
+	User            string
+	Password        string
+	Host            string
+	Port            string
+	DBName          string
+}
+
+func LoadConfigFromEnv() (Config, error) {
+	cfg := Config{
+		User:            os.Getenv("MYSQL_USER"),
+		Password:        os.Getenv("MYSQL_PASSWORD"),
+		Host:            os.Getenv("MYSQL_HOST"),
+		Port:            os.Getenv("MYSQL_PORT"),
+		DBName:          os.Getenv("MYSQL_DB"),
+	}
+
+	if cfg.User == "" || cfg.Host == "" || cfg.Port == "" || cfg.DBName == "" {
+		return Config{}, fmt.Errorf("mysql: missing required environment variables (MYSQL_USER, MYSQL_HOST, MYSQL_PORT, MYSQL_DB)")
+	}
+
+	return cfg, nil
+}
+
+func (c Config) DSN() string {
+	driverCfg := driverConfig(c)
+	return driverCfg.FormatDSN()
+}

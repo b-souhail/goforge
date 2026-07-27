@@ -1,0 +1,38 @@
+package mysql
+
+import (
+	"database/sql"
+	"fmt"
+
+	driver "github.com/go-sql-driver/mysql"
+)
+
+func driverConfig(c Config) driver.Config {
+	return driver.Config{
+		User:            c.User,
+		Passwd:          c.Password,
+		Net:             "tcp",
+		Addr:            fmt.Sprintf("%s:%s", c.Host, c.Port),
+		DBName:          c.DBName,
+		MultiStatements: true,
+		ParseTime:       true,
+	}
+}
+
+func Open(cfg Config) (*sql.DB, error) {
+	db, err := sql.Open("mysql", cfg.DSN())
+	if err != nil {
+		return nil, fmt.Errorf("mysql: failed to open connection: %w", err)
+	}
+	fmt.Println("mysql connection established", "host", cfg.Host, "db", cfg.DBName)
+
+	return db, nil
+}
+
+func Close(db *sql.DB) {
+	if err := db.Close(); err != nil {
+		 fmt.Printf("mysql: failed to open connection: %v \n", err)
+		return
+	}
+	fmt.Println("mysql connection closed")
+}
