@@ -1,0 +1,12 @@
+package {{(Lower .Module)}}
+
+// ValidateBusinessRules validates the enterprise business rules of the entity.
+//
+// This method should verify only domain-specific invariants and business
+// constraints. Do not perform transport or input validation here
+// (e.g. JSON parsing, required fields, email format, UUID format).
+//
+func ({{(Receiver .Module)}} *{{(Capitalize .Module)}}) ValidateBusinessRules() error {
+	// TODO: implement enterprise business rules.
+	return nil
+}

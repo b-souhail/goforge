@@ -1,0 +1,14 @@
+package {{(Lower .Module)}}
+
+type {{(Capitalize .Module)}} struct {
+	Id int
+	// TODO: add your fields
+}
+
+func New{{(Capitalize .Module)}}(id int) (*{{(Capitalize .Module)}}, error) {
+	{{(Receiver .Module)}} := &{{(Capitalize .Module)}}{Id: id}
+	if err := {{(Receiver .Module)}}.ValidateBusinessRules(); err != nil {
+		return nil, err
+	}
+	return {{(Receiver .Module)}}, nil
+}

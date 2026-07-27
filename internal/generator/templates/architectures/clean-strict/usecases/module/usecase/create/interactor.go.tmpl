@@ -1,0 +1,11 @@
+package {{.}}
+
+type Interactor struct {
+    Gateway   {{}}Gateway
+	Presenter OutputBoundary
+}
+
+func (i *Interactor) Execute(request RequestModel) {
+	response := ResponseModel{}
+	i.Presenter.Present(response)
+}
