@@ -1,87 +1,37 @@
 <h2 align="center">🏛️ Architecture</h2>
 
-GoForge scaffolds every project around **Clean Architecture**: a layered design where dependencies always point inward, toward the domain.
+<p align="center">
+By default, GoForge generates a strict, <strong>Use Case oriented Clean Architecture</strong> —
+built directly from Robert C. Martin's (Uncle Bob) own layer and component names:
+<strong>Entities</strong>, <strong>Use Cases</strong> (Interactors, Input/Output Boundaries,
+Request/Response Models), <strong>Interface Adapters</strong> (Controllers, Presenters, Gateways),
+<strong>Frameworks &amp; Drivers</strong>.
+</p>
 
-``` yaml
-
-myapp/
-├── blueprint.yaml
-├── cmd/
-│   └── main.go
-└── internal/
-    ├── domain/
-    │   ├── entity/
-    │   └── repository/
-    ├── application/
-    │   ├── DTOs/
-    │   └── usecases/
-    ├── infrastructure/
-    │   ├── repository/
-    │   └── database/
-    └── delivery/
-        │── http/
-        └── websocket/
-
-```
+> 📖 **Sources**
+> - [*The Clean Architecture*](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) — blog.cleancoder.com, 2012
+> - *Clean Architecture: A Craftsman's Guide to Software Structure and Design* — Robert C. Martin, 2017
+> - [*Architecture: The Lost Years*](https://www.youtube.com/watch?v=WpkDN78P884) — Ruby Midwest 2011 keynote, Robert C. Martin
+> - [*conferences By Uncle Bob*]
 
 ---
-<h2 align="center"> 🧭 The Four Layers </h2>
 
-<div align="center"> 
+<h2 align="center">📌 Status</h2>
 
-| Layer | Role | Depends on |
-| --- | --- | --- |
-| 🧬 **Domain** | Business entities and repository *interfaces*. The core of the application. | Nothing |
-| ⚙️ **Application** | Use cases and DTOs. Orchestrates domain logic for the outside world. | Domain |
-| 🔧 **Infrastructure** | Concrete implementations: database repositories, external services. | Domain, Application |
-| 🌐 **Delivery** | Entry points: HTTP handlers, routes, WebSocket, middlewares. | Application |
+<div align="center">
 
-The rule is simple: **inner layers never know about outer layers.** The domain has no idea an HTTP server or a MySQL database exists — it only exposes interfaces that the infrastructure layer implements.
+| Architecture | Status |
+|--------------|:---:|
+| Clean Architecture — Use Case oriented (strict, Uncle Bob) | 🚧 In Development — default |
+| Clean Architecture — DDD oriented | 🚧 In Development — already started, will follow the strict approach |
+| Hexagonal Architecture | 💬 Community Interest |
+| Onion Architecture | 💬 Community Interest |
+| Event-Driven Architecture | 💬 Community Interest |
 
 </div>
 
----
-
-<h2 align="center"> 🧬 Domain Layer </h2>
-
-Contains the business entities and the repository interfaces they need, without any framework or database detail.
-
-- `domain/entity/` — plain Go structs representing business objects
-- `domain/repository/` — interfaces describing how entities are persisted, with no implementation detail
+The strict Use Case oriented approach is what `goforge init` generates today. The DDD-oriented Clean Architecture is already underway and will land after the strict approach is complete. Hexagonal, Onion, and Event-Driven are being considered based on community interest — the long-term goal is for architecture to be a configurable choice, not a fixed decision.
 
 ---
 
-<h2 align="center"> ⚙️ Application Layer </h2>
-
-Contains the use cases: the actual business operations of the application, plus the DTOs used to move data in and out of them.
-
-- `application/usecases/` — one use case per business operation, built on top of domain repository interfaces
-- `application/DTOs/` — request/response shapes exposed to the delivery layer
-
----
-
-<h2 align="center">🔧 Infrastructure Layer </h2>
-
-Implements the interfaces defined in the domain layer, and wires up anything external: databases, caches, third-party services.
-
-- `infrastructure/repository/` — concrete implementations of the domain repository interfaces
-- `infrastructure/database/` — database connection and configuration (MySQL, PostgreSQL...)
-
----
-
-<h2 align="center">🌐 Delivery Layer </h2>
-
-The entry point of the application — where the outside world talks to your use cases.
-
-- `delivery/http/` — routes and HTTP handlers ...
-- `delivery/websocket/` — optional WebSocket hub and connections
-
----
-
-<h2 align="center"> 🔄 Why This Structure </h2>
-
-- **Testability** — the domain and application layers can be tested without a database or an HTTP server.
-- **Replaceability** — swapping MySQL for PostgreSQL, or the HTTP framework for another one, only touches the infrastructure/delivery layers.
-- **Clarity** — every file has one obvious place to live, which keeps the codebase predictable as it grows.
-
-> 🌱 The four layers (`domain`, `application`, `infrastructure`, `delivery`) are currently fixed, but the architecture is designed to support additional or alternative architectures in the future without breaking existing projects.
+📝 *A detailed breakdown of the architecture (layers, generated structure, use case wiring) will be added here directly.*
