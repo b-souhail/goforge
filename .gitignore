@@ -1,4 +1,4 @@
-goforge     
+goforge
 *.exe
 *.out
 .env

@@ -18,7 +18,6 @@ require (
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
-	github.com/gorilla/websocket v1.5.3
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 	golang.org/x/tools v0.43.0
